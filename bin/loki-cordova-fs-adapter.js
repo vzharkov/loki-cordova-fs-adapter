@@ -89,15 +89,14 @@
         _createClass(LokiCordovaFSAdapter, [{
             key: "saveDatabase",
             value: function saveDatabase(dbname, dbstring, callback) {
-                var _this2 = this;
-
                 console.log(TAG, "saving database");
                 this._getFile(dbname, function (fileEntry) {
                     fileEntry.createWriter(function (fileWriter) {
                         fileWriter.onwriteend = function () {
                             if (fileWriter.length === 0) {
-                                var blob = _this2._createBlob(dbstring, "text/plain");
-                                fileWriter.write(blob);
+                                // var blob = this._createBlob(dbstring, "text/plain");
+                                // remove blob convertion because it corrupt data
+                                fileWriter.write(dbstring);
                                 callback();
                             }
                         };
@@ -140,11 +139,11 @@
         }, {
             key: "deleteDatabase",
             value: function deleteDatabase(dbname, callback) {
-                var _this3 = this;
+                var _this2 = this;
 
                 var _dataDirectory = this.options.dataDirectory || cordova.file.dataDirectory;
                 window.resolveLocalFileSystemURL(_dataDirectory, function (dir) {
-                    var fileName = _this3.options.prefix + "__" + dbname;
+                    var fileName = _this2.options.prefix + "__" + dbname;
                     dir.getFile(fileName, { create: true }, function (fileEntry) {
                         fileEntry.remove(function () {
                             callback();
@@ -163,11 +162,11 @@
         }, {
             key: "_getFile",
             value: function _getFile(name, handleSuccess, handleError) {
-                var _this4 = this;
+                var _this3 = this;
 
                 var _dataDirectory = this.options.dataDirectory || cordova.file.dataDirectory;
                 window.resolveLocalFileSystemURL(_dataDirectory, function (dir) {
-                    var fileName = _this4.options.prefix + "__" + name;
+                    var fileName = _this3.options.prefix + "__" + name;
                     dir.getFile(fileName, { create: true }, handleSuccess, handleError);
                 }, function (err) {
                     throw new LokiCordovaFSAdapterError("Unable to resolve local file system URL" + JSON.stringify(err));

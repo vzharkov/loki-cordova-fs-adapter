@@ -15,8 +15,9 @@ class LokiCordovaFSAdapter {
                     (fileWriter) => {
                         fileWriter.onwriteend = () => {
                             if (fileWriter.length === 0) {
-                                var blob = this._createBlob(dbstring, "text/plain");
-                                fileWriter.write(blob);
+                                // var blob = this._createBlob(dbstring, "text/plain");
+                                // remove blob convertion because it corrupt data
+                                fileWriter.write(dbstring);
                                 callback();
                             }
                         };
